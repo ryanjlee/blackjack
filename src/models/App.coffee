@@ -11,24 +11,21 @@ class window.App extends Backbone.Model
   playDealer: ->
     computerHand = @get('dealerHand')
     computerHand.at(0).flip()
+    checkingMin = false
     checkHand = (score) ->
-      if score => 17 and score =< 21
-        console.log('You lose!')
-        return score
-      if computerHand.scores()[0] > 21
-        console.log('You win')
+      console.log('Max: ' + computerHand.scores()[1] + ' Min: ' + computerHand.scores()[0])
+      if score >= 17 and score <= 21
         return score
       if score < 17
         computerHand.hit()
-        checkHand (score)
-      if score > 21
-        checkHand (computerHand.scores()[0])
-    checkHand computerHand.scores()[1]
+        if checkingMin
+          return checkHand(computerHand.scores()[0])
+        else
+          return checkHand(computerHand.scores()[1])
+      if score > 21 and not checkingMin
+        checkingMin = true
+        return checkHand(computerHand.scores()[0])
+      else
+        return score
 
-    # if @get('dealerHand').scores()[1] < 17
-    #   @get('dealerHand').hit()
-    # else if @get('dealerHand').scores()[1] > 21
-    #   if @get('dealerHand').scores()[0] < 17
-    #     @get('dealerHand').hit()
-    # else console.log('Yeah!')
-
+    checkHand(computerHand.scores()[1])
