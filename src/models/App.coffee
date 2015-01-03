@@ -7,6 +7,9 @@ class window.App extends Backbone.Model
     @set 'playerHand', deck.dealPlayer()
     @set 'dealerHand', deck.dealDealer()
     @get('playerHand').on('stand', => @playDealer()) # look at this later
+    @get('playerHand').on('hit', => @checkPlayerHand())
+    if @get('playerHand').scores()[1] is 21
+      console.log @endGame(21, @get('dealerHand').scores()[1])
 
   playDealer: ->
     computerHand = @get('dealerHand')
@@ -28,7 +31,36 @@ class window.App extends Backbone.Model
       else
         return score
 
-    endGame (checkHand(computerHand.scores()[1]))
+    computerScore = checkHand(computerHand.scores()[1])
 
-  endGame: ->
+    if @get('playerHand').scores()[1] <= 21
+      playerScore = @get('playerHand').scores()[1]
+    else
+      playerScore = @get('playerHand').scores()[0]
+
+
+    console.log @endGame playerScore, computerScore
+
+  checkPlayerHand: ->
+    humanHand = @get('playerHand')
+    if humanHand.scores()[1] is 21 or humanHand.scores()[0] is 21
+      @playDealer()
+    if humanHand.scores()[1] > 21 and humanHand.scores()[0] > 21
+      @playDealer()
+
+
+  endGame: (playerScore, computerScore) ->
+    if playerScore > 21
+      return result = 'You lose'
+    if computerScore > 21
+      return result = 'You win'
+    if playerScore > computerScore
+      return result = 'You win'
+    if computerScore > playerScore
+      return result = 'You lose'
+    if computerScore is playerScore
+      return result = 'Push'
+
+
+
 
