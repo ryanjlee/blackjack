@@ -28,4 +28,7 @@ class window.App extends Backbone.Model
       else
         return score
 
-    checkHand(computerHand.scores()[1])
+    endGame (checkHand(computerHand.scores()[1]))
+
+  endGame: ->
+
