@@ -9,9 +9,9 @@ class window.App extends Backbone.Model
     @get('playerHand').on('stand', => @playDealer()) # look at this later
     @get('playerHand').on('hit', => @checkPlayerHand())
     if @get('playerHand').scores()[1] is 21
-      console.log @endGame(21, @get('dealerHand').scores()[1])
+      @playDealer(true)
 
-  playDealer: ->
+  playDealer: (autowin) ->
     computerHand = @get('dealerHand')
     computerHand.at(0).flip()
     checkingMin = false
@@ -39,7 +39,7 @@ class window.App extends Backbone.Model
       playerScore = @get('playerHand').scores()[0]
 
 
-    console.log @endGame playerScore, computerScore
+    console.log @endGame playerScore, computerScore, autowin
 
   checkPlayerHand: ->
     humanHand = @get('playerHand')
@@ -49,7 +49,9 @@ class window.App extends Backbone.Model
       @playDealer()
 
 
-  endGame: (playerScore, computerScore) ->
+  endGame: (playerScore, computerScore, autowin) ->
+    if autowin
+      return result = 'You win'
     if playerScore > 21
       return result = 'You lose'
     if computerScore > 21
