@@ -39,7 +39,9 @@ class window.App extends Backbone.Model
       playerScore = @get('playerHand').scores()[0]
 
 
-    console.log @endGame playerScore, computerScore, autowin
+    $('button').remove()
+    $('body').prepend('<button class="btn btn-lrg btn-primary play-again">Play again?</button>');
+    $('.play-again').on('click', ->location.reload())
 
   checkPlayerHand: ->
     humanHand = @get('playerHand')
