@@ -8,8 +8,9 @@ class window.App extends Backbone.Model
     @set 'dealerHand', deck.dealDealer()
     @get('playerHand').on('stand', => @playDealer()) # look at this later
     @get('playerHand').on('hit', => @checkPlayerHand())
-    if @get('playerHand').scores()[1] is 21
-      @playDealer(true)
+    $(document).ready(=>
+      if @get('playerHand').scores()[1] is 21
+        @playDealer(true))
 
   playDealer: (autowin) ->
     computerHand = @get('dealerHand')
@@ -38,10 +39,11 @@ class window.App extends Backbone.Model
     else
       playerScore = @get('playerHand').scores()[0]
 
-
     $('button').remove()
-    $('body').prepend('<button class="btn btn-lrg btn-primary play-again">Play again?</button>');
+    $('body').append('<button class="btn btn-lrg btn-primary play-again">Play again?</button>');
     $('.play-again').on('click', ->location.reload())
+    notify = $('<div class="winner"></div>').text(@endGame(playerScore,computerScore,autowin));
+    $('body').append(notify)
 
   checkPlayerHand: ->
     humanHand = @get('playerHand')
